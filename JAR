@@ -1,0 +1,27 @@
+public class Transaction {
+    @Id
+    private String id;
+    private double amount;
+    private String currency; // e.g., INR, USD
+    private LocalDate date;
+    private String type; // credit or debit
+}
+
+@RestController
+@RequestMapping("/api/transactions")
+public class TransactionController {
+    @Autowired
+    private TransactionService transactionService;
+
+    @PostMapping
+    public ResponseEntity<TransactionDTO> createTransaction(@RequestBody TransactionDTO transactionDTO) {
+        TransactionDTO createdTransaction = transactionService.createTransaction(transactionDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTransaction);
+    }
+
+    @GetMapping("/reports/weekly")
+    public ResponseEntity<ReportDTO> getWeeklyReport() {
+        ReportDTO report = transactionService.getWeeklyReport();
+        return ResponseEntity.ok(report);
+    }
+}
